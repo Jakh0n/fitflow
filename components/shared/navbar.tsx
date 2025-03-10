@@ -2,6 +2,7 @@ import { navLinks } from '@/constants'
 import Link from 'next/link'
 import React from 'react'
 import Logo from './logo'
+import ModeToggle from './mode-toggle'
 
 function Navbar() {
 	return (
@@ -9,6 +10,7 @@ function Navbar() {
 			<div className='container mx-auto flex justify-between items-center h-full'>
 				<Logo />
 				<div className='flex items-center gap-4'>
+					<ModeToggle />
 					{navLinks.map(link => (
 						<Link
 							key={link.label}
