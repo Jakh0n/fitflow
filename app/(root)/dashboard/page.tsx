@@ -14,10 +14,10 @@ import React from 'react'
 function dashboardPage() {
 	return (
 		<div className='h-screen items-center max-w-6xl w-full flex container mx-auto '>
-			<div className='grid grid-cols-2 gap-8 w-full items-center'>
+			<div className=' max-sm:mt-24 max-md:mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 w-full items-center'>
 				<div className='flex flex-col space-y-3 '>
 					<div className='w-full p-4 rounded-md flex justify-between bg-gradient-to-t from-background to-secondary'>
-						<h1 className='text-2xl font-bold'>Trainings</h1>
+						<h1 className='text-xl lg:text-2xl font-bold'>Trainings</h1>
 						<Dialog>
 							<DialogTrigger>
 								<BadgePlus className='w-4 h-4' />
@@ -43,16 +43,16 @@ function dashboardPage() {
 				</div>
 				<div className='flex flex-col space-y-3 relative w-full'>
 					<div className='p-4 rounded-md bg-gradient-to-r from-blue-900 to-background relative h-24'>
-						<div className='text-2xl font-bold'>Total week</div>
-						<div className='text-3xl font-bold'>02:08:47</div>
+						<div className='text-xl lg:text-2xl font-bold'>Total week</div>
+						<div className='text-2xl lg:text-3xl font-bold'>02:08:47</div>
 					</div>
 					<div className='p-4 rounded-md bg-gradient-to-r from-secondary to-background relative h-24'>
-						<div className='text-2xl font-bold'>Total week</div>
-						<div className='text-3xl font-bold'>02:08:47</div>
+						<div className='text-xl lg:text-2xl font-bold'>Total week</div>
+						<div className='text-2xl lg:text-3xl font-bold'>02:08:47</div>
 					</div>
 					<div className='p-4 rounded-md bg-gradient-to-r from-destructive to-background relative h-24'>
-						<div className='text-2xl font-bold'>Total week</div>
-						<div className='text-3xl font-bold'>02:08:47</div>
+						<div className='text-xl lg:text-2xl font-bold'>Total week</div>
+						<div className='text-2xl lg:text-3xl font-bold'>02:08:47</div>
 					</div>
 				</div>
 			</div>

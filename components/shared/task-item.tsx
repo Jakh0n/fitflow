@@ -14,7 +14,7 @@ const TaskItem = () => {
 			</div>
 			<div className='flex gap-1 items-center'>
 				<HiStatusOnline />
-				<span className='capitalize text-sm'>Unstarted</span>
+				<span className='capitalize text-sm '>Unstarted</span>
 			</div>
 			<div className='flex gap-1 items-center justify-self-end'>
 				<Button variant={'ghost'} size={'icon'} className='w-8 h-8'>
