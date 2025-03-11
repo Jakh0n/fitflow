@@ -4,6 +4,7 @@ import './globals.css'
 import { ChildProps } from '@/types'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { ClerkProvider } from '@clerk/nextjs'
+import { Toaster } from '@/components/ui/sonner'
 const geistSans = Geist({
 	variable: '--font-geist-sans',
 	subsets: ['latin'],
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: ChildProps) {
 					>
 						{children}
 					</ThemeProvider>
+					<Toaster position='top-center' richColors />
 				</body>
 			</html>
 		</ClerkProvider>
