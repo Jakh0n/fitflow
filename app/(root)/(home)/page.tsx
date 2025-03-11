@@ -1,14 +1,18 @@
+'use client'
 import FeaturedItems from '@/components/shared/featuredItems'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { programs } from '@/constants'
-import { SignedIn, SignedOut, SignOutButton } from '@clerk/nextjs'
+import { SignedIn, SignedOut, SignInButton, SignOutButton } from '@clerk/nextjs'
 import { LogOutIcon } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 import { FaArrowRightLong } from 'react-icons/fa6'
+import { useRouter } from 'next/navigation'
 
 function HomePage() {
+	const router = useRouter()
+
 	return (
 		<>
 			<div className='h-screen w-full flex items-center'>
@@ -24,11 +28,15 @@ function HomePage() {
 						environment. Let&apos;s transform together.
 					</p>
 					<SignedOut>
-						<Button className='mt-10 w-fit text-sm'>Get Started</Button>
+						<SignInButton mode='modal'>
+							<Button className='mt-10 w-fit text-sm'>Get Started</Button>
+						</SignInButton>
 					</SignedOut>
 					<SignedIn>
 						<div className='flex items-center gap-2 mt-10'>
-							<Button>Got to gym </Button>
+							<Button onClick={() => router.push('/dashboard')}>
+								Got to gym{' '}
+							</Button>
 							<SignOutButton>
 								<Button
 									className='w-fit flex items-center gap-2'
