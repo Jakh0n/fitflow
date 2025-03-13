@@ -14,31 +14,28 @@ import {
 } from '../ui/form'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
-import { addDoc, collection } from 'firebase/firestore'
-import { db } from '@/firebase'
-import { useUser } from '@clerk/nextjs'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 
-function TaskForm() {
-	const { user } = useUser()
+interface Props {
+	title?: string
+	isEdit?: boolean
+	onClose?: () => void
+	handler: (values: z.infer<typeof taskSchema>) => Promise<void | null>
+}
+
+function TaskForm({ handler, title = '' }: Props) {
 	const [isLoading, setIsLoading] = useState(false)
 	const form = useForm<z.infer<typeof taskSchema>>({
 		resolver: zodResolver(taskSchema),
 		defaultValues: {
-			title: '',
+			title,
 		},
 	})
 
 	const onSubmit = (values: z.infer<typeof taskSchema>) => {
 		setIsLoading(true)
-		const promise = addDoc(collection(db, 'tasks'), {
-			title: values.title,
-			status: 'unstarted',
-			startTime: null,
-			endTime: null,
-			userId: user?.id,
-		}).finally(() => setIsLoading(false))
+		const promise = handler(values).finally(() => setIsLoading(false))
 		toast.promise(promise, {
 			loading: 'Creating task...',
 			success: 'Task created successfully',
