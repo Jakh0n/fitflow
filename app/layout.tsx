@@ -5,6 +5,7 @@ import { ChildProps } from '@/types'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { ClerkProvider } from '@clerk/nextjs'
 import { Toaster } from '@/components/ui/sonner'
+
 const geistSans = Geist({
 	variable: '--font-geist-sans',
 	subsets: ['latin'],

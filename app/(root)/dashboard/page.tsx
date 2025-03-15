@@ -1,6 +1,6 @@
 'use client'
 import TaskForm from '@/components/form/form'
-import TaskItem from '@/components/shared/task-item'
+import { ScrollAreaDemo } from '@/components/shared/scroll'
 import { Button } from '@/components/ui/button'
 import {
 	Dialog,
@@ -12,46 +12,95 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { db } from '@/firebase'
 import { taskSchema } from '@/lib/validation'
+import { TaskService } from '@/service/task.service'
+import { ITask } from '@/types'
 import { useUser } from '@clerk/nextjs'
 import { addDoc, collection } from 'firebase/firestore'
-import { BadgePlus } from 'lucide-react'
-import React, { useState } from 'react'
+import { BadgePlus, Loader2 } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 function DashboardPage() {
 	const { user } = useUser()
 	const [isOpen, setIsOpen] = useState(false)
+	const [tasks, setTasks] = useState<ITask[]>([])
+	const [isLoading, setIsLoading] = useState(false)
 
-	const onAdd = async ({ title }: z.infer<typeof taskSchema>) => {
-		if (!user) return null
-		return addDoc(collection(db, 'tasks'), {
-			title,
-			status: 'unstarted',
-			startTime: null,
-			endTime: null,
-			userId: user?.id,
-		}).then(() => {
+	const handleTasks = async () => {
+		setIsLoading(true)
+		try {
+			const tasks = await TaskService('tasks')
+			setTasks(tasks)
+		} catch (error) {
+			toast.error(`Failed to load tasks: ${error}`)
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	const onAddTask = async ({ title }: z.infer<typeof taskSchema>) => {
+		if (!user?.id) return
+
+		const promise = (async () => {
+			const docRef = await addDoc(collection(db, 'tasks'), {
+				title,
+				status: 'unstarted',
+				startTime: 0,
+				endTime: 0,
+				totalTime: 0,
+				userId: user.id,
+			})
+
 			setIsOpen(false)
+
+			const newTask: ITask = {
+				id: docRef.id,
+				title,
+				status: 'unstarted',
+				startTime: 0,
+				endTime: 0,
+				totalTime: 0,
+				userId: user.id,
+			}
+
+			setTasks(prev => [...prev, newTask])
+			return newTask
+		})()
+
+		toast.promise(promise, {
+			loading: 'Adding task...',
+			error: 'Failed to add task',
 		})
 	}
+
+	useEffect(() => {
+		handleTasks()
+	}, [])
+
 	return (
 		<>
 			<div className='h-screen items-center max-w-6xl w-full flex container mx-auto '>
-				<div className=' max-sm:mt-24 max-md:mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 w-full items-center'>
+				<div className=' mt-[30vh] md:mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 w-full items-center'>
 					<div className='flex flex-col space-y-3 '>
 						<div className='w-full p-4 rounded-md flex justify-between bg-gradient-to-t from-background to-secondary'>
 							<h1 className='text-xl lg:text-2xl font-bold'>Trainings</h1>
-							<Button variant={'outline'} onClick={() => setIsOpen(true)}>
+							<Button
+								variant={'outline'}
+								onClick={() => {
+									setIsOpen(true)
+								}}
+							>
 								<BadgePlus className='w-4 h-4' />
 							</Button>
 						</div>
 						<Separator className='my-4' />
 						<div className='w-full p-4 rounded-md flex justify-between bg-gradient-to-b from-background to-secondary relative min-h-60'>
-							<div className='flex flex-col space-y-3 w-full'>
-								{Array.from({ length: 3 }).map((_, idx) => (
-									<TaskItem key={idx} />
-								))}
-							</div>
+							{isLoading ? (
+								<Loader2 className='w-8 h-8 animate-spin' />
+							) : (
+								<ScrollAreaDemo tasks={tasks} />
+							)}
 						</div>
 					</div>
 					<div className='flex flex-col space-y-3 relative w-full'>
@@ -78,7 +127,7 @@ function DashboardPage() {
 						<DialogTitle>Are you absolutely sure?</DialogTitle>
 					</DialogHeader>
 					<DialogContent>
-						<TaskForm handler={onAdd} />
+						<TaskForm handler={onAddTask} />
 					</DialogContent>
 				</DialogContent>
 			</Dialog>
