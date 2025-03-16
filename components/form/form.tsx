@@ -20,11 +20,11 @@ import { Loader2 } from 'lucide-react'
 interface Props {
 	title?: string
 	isEdit?: boolean
-	onClose?: () => void
+	onClose?: () => void | null
 	handler: (values: z.infer<typeof taskSchema>) => Promise<void | null>
 }
 
-function TaskForm({ handler, title = '' }: Props) {
+function TaskForm({ handler, title, isEdit, onClose }: Props) {
 	const [isLoading, setIsLoading] = useState(false)
 	const form = useForm<z.infer<typeof taskSchema>>({
 		resolver: zodResolver(taskSchema),
@@ -56,13 +56,20 @@ function TaskForm({ handler, title = '' }: Props) {
 							<FormItem>
 								<FormLabel>Title</FormLabel>
 								<FormControl>
-									<Input placeholder='Press' {...field} />
+									<Input placeholder="Let's do it..." {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-					<Button type='submit'>Submit</Button>
+					<div className='flex gap-4'>
+						{isEdit && (
+							<Button type='button' variant={'destructive'} onClick={onClose}>
+								cancel
+							</Button>
+						)}
+						<Button type='submit'>Submit</Button>
+					</div>
 				</form>
 			</Form>
 		</>
