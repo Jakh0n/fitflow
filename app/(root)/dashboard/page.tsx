@@ -179,6 +179,14 @@ function DashboardPage() {
 								<p className='text-center text-md font-mono'>
 									Add a task to get started
 								</p>
+								<Button
+									onClick={() => {
+										setIsOpen(true)
+									}}
+									className='w-fit mx-auto mt-4 pt-5 pb-5 pr-20 pl-20'
+								>
+									<BadgePlus className='w-4 h-4' />
+								</Button>
 							</div>
 						)}
 					</div>

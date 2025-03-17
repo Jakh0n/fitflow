@@ -29,7 +29,7 @@ function TaskForm({ handler, title, isEdit, onClose }: Props) {
 	const form = useForm<z.infer<typeof taskSchema>>({
 		resolver: zodResolver(taskSchema),
 		defaultValues: {
-			title,
+			title: title || '',
 		},
 	})
 
