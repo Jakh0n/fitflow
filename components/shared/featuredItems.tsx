@@ -1,8 +1,7 @@
 'use client'
 import { featuredItems } from '@/constants'
-import React from 'react'
-import { Carousel, CarouselContent, CarouselItem } from '../ui/carousel'
 import Autoplay from 'embla-carousel-autoplay'
+import { Carousel, CarouselContent, CarouselItem } from '../ui/carousel'
 
 function FeaturedItems() {
 	return (
